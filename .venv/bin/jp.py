@@ -1,4 +1,4 @@
-#!/Users/bagjinseong/Documents/GraincBackend/.venv/bin/python3.12
+#!/Users/bagjinseong/Documents/GraincCode/GraincBackend/.venv/bin/python3.12
 
 import sys
 import json

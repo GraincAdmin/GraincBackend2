@@ -1,4 +1,4 @@
-#!/Users/bagjinseong/Documents/GraincBackend/.venv/bin/python
+#!/Users/bagjinseong/Documents/GraincCode/GraincBackend/.venv/bin/python3.12
 # -*- coding: utf-8 -*-
 import re
 import sys
