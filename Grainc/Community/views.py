@@ -130,15 +130,12 @@ def HomeCommunityArticleMostLiked(request):
             '-create_date'
         )[:3]
         
-        if articles.exists():
-            # user = getUserInformation(request)
-            # if isinstance(user, Response):
-            #     return user
-            
-            serializer = CommunityArticleSerializers(articles, many=True, context={'user': False})
-            return Response(serializer.data)
-        else:
-            return Response({'status': 'no articles'}, status=404)
+        user = getUserInformation(request)
+        if isinstance(user, Response):
+            return user
+        
+        serializer = CommunityArticleSerializers(articles, many=True, context={'user': False})
+        return Response(serializer.data)
     except Exception as e:
         print(e)
         return Response({'error': str(e)}, status=500)

@@ -2,3 +2,5 @@ Grainc/.env
 .env
 Grainc/.venv
 .venv
+
+echo ".DS_Store" >> .gitignore
