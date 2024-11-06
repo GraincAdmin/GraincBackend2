@@ -1265,12 +1265,23 @@ def GetUserSavedArticle(request):
         user_id = decodeUserToken(auth_header)
         user = ServiceUser.objects.get(id=user_id)
         
-        user_saved_articles = Community_Articles.objects.filter(author=user, saved_article=True).order_by('-create_date').all()
+        user_saved_articles = Community_Articles.objects.filter(author=user, saved_article=True).order_by('-create_date')
 
-        serializer = UserSavedArticleStatusSerializer(user_saved_articles, many=True)
+        page = request.GET.get('page')
+        paginator = Paginator(user_saved_articles, 6)
+        try:
+            user_article = paginator.page(page)
+        except PageNotAnInteger:
+            user_article = paginator.page(1)
+        except EmptyPage:
+            user_article = paginator.page(paginator.num_pages)
+
+        serializer = UserSavedArticleStatusSerializer(user_article, many=True)
 
         return Response({
             'saved_articles': serializer.data,
+            'current_page': page,
+            'max_page': paginator.num_pages
         })
 
     except ServiceUser.DoesNotExist:
