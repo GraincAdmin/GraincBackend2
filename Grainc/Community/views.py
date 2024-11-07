@@ -1193,6 +1193,15 @@ def article_upload(request):
                     article = form.save()
                     user.save()
                     status = '커뮤니티글 업로드 완료'
+                    if upload_type == 'save':
+                        pre_saved_article_id = request.data.get('saved_article_id')
+                        print(pre_saved_article_id)
+                        if pre_saved_article_id:
+                            saved_article = Community_Articles.objects.only(
+                                'id', 'author', 'saved_article'
+                            ).get(id=pre_saved_article_id)
+                            if saved_article.author == user:
+                                saved_article.delete()
                     if upload_type == 'new':
                         CreateNewNotification('article', article)
                 else:
@@ -1306,7 +1315,10 @@ def LoadUserSavedArticle(request, article_id):
             return Response({'status': 'not authorized'}, status=304)
 
     except ServiceUser.DoesNotExist:
-        return Response({'status': 'user does not exist'})
+        return Response({'status': 'user does not exist'}, status=404)
+    
+    except Community_Articles.DoesNotExist:
+        return Response({'status': 'article does not exists'}, status=404)
     
     except jwt.ExpiredSignatureError:
         return Response({'status': 'Token expired'}, status=401)
